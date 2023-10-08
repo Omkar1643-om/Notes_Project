@@ -32,7 +32,7 @@ class _LoginState extends State<Login> {
     }
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.black,
       body: Form(
         key: _formKey,
         child: Container(
@@ -50,8 +50,8 @@ class _LoginState extends State<Login> {
                     const Text(
                       "Welcome",
                       style: TextStyle(fontSize: 25.0,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black),
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black),
                     ),
                     const SizedBox(height: 10),
                     Text(
@@ -144,7 +144,11 @@ class _LoginState extends State<Login> {
                               );
                             }
                           },
-                          child: const Text("Login"
+                          child: const Text("Login",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 18.0,
+                              )
                           ),
                         ),
                         Row(

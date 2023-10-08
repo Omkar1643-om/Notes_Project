@@ -4,7 +4,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'login.dart';
 
 class Home extends StatelessWidget {
-  Home({super.key});
+  Home({Key? key});
 
   final Box _boxLogin = Hive.box("login");
 
@@ -12,7 +12,7 @@ class Home extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Login App"),
+        title: const Text("To Do List"),
         elevation: 0,
         actions: [
           Padding(
@@ -38,25 +38,49 @@ class Home extends StatelessWidget {
                 icon: const Icon(Icons.logout_rounded),
               ),
             ),
-          )
+          ),
         ],
       ),
-      backgroundColor: Theme.of(context).colorScheme.primary,
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              "Welcome 🎉",
-              style: Theme.of(context).textTheme.bodyLarge,
+      backgroundColor: Colors.white,
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: SizedBox(
+              width: double.infinity,
+              child: TextField(
+                style: const TextStyle(color: Colors.black),
+                decoration: InputDecoration(
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 10,
+                  ),
+                  hintText: "Search...",
+                  hintStyle: const TextStyle(color: Colors.black),
+                  prefixIcon: const Icon(Icons.search, color: Colors.black),
+                  filled: true,
+                  fillColor: Colors.black12,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(20),
+                    borderSide: BorderSide.none,
+                  ),
+                ),
+              ),
             ),
-            const SizedBox(height: 10),
-            Text(
-              _boxLogin.get("userName"),
-              style: Theme.of(context).textTheme.headlineLarge,
+          ),
+          // Your existing content
+          const Expanded(
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  // Content of your todo list
+                  Text("Your Todo List Content Here"),
+                ],
+              ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
