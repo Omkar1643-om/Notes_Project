@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'pages/login.dart';
 
 class MainApp extends StatelessWidget {
-  const MainApp({super.key});
+  const MainApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

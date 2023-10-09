@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 
 import 'home.dart';
 import 'signup.dart';
@@ -8,7 +7,6 @@ class Login extends StatefulWidget {
   const Login({
     Key? key,
   }) : super(key: key);
-
 
   @override
   State<Login> createState() => _LoginState();
@@ -22,12 +20,14 @@ class _LoginState extends State<Login> {
   final TextEditingController _controllerPassword = TextEditingController();
 
   bool _obscurePassword = true;
-  final Box _boxLogin = Hive.box("login");
-  final Box _boxAccounts = Hive.box("accounts");
+
+  // Replace Hive with a simple Map
+  final Map<String, dynamic> _loginData = {};
+  final Map<String, dynamic> _accountsData = {};
 
   @override
   Widget build(BuildContext context) {
-    if (_boxLogin.get("loginStatus") ?? false) {
+    if (_loginData["loginStatus"] ?? false) {
       return Home();
     }
 
@@ -41,7 +41,10 @@ class _LoginState extends State<Login> {
             child: Container(
               width: 400,
               height: 400,
-              decoration: BoxDecoration(borderRadius: BorderRadius.circular(30), color: Colors.white,),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(30),
+                color: Colors.white,
+              ),
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Column(
@@ -49,14 +52,16 @@ class _LoginState extends State<Login> {
                     const SizedBox(height: 50),
                     const Text(
                       "Welcome",
-                      style: TextStyle(fontSize: 25.0,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black),
+                      style: TextStyle(
+                        fontSize: 25.0,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
                     ),
                     const SizedBox(height: 10),
                     Text(
                       "Login to your account",
-                      style: Theme.of(context).textTheme.bodyMedium,
+                      style: Theme.of(context).textTheme.bodyText1,
                     ),
                     const SizedBox(height: 10),
                     TextFormField(
@@ -72,14 +77,14 @@ class _LoginState extends State<Login> {
                           borderRadius: BorderRadius.circular(10),
                         ),
                       ),
-                      onEditingComplete: () => _focusNodePassword.requestFocus(),
+                      onEditingComplete: () =>
+                          _focusNodePassword.requestFocus(),
                       validator: (String? value) {
                         if (value == null || value.isEmpty) {
                           return "Please enter username.";
-                        } else if (!_boxAccounts.containsKey(value)) {
+                        } else if (!_accountsData.containsKey(value)) {
                           return "Username is not registered.";
                         }
-
                         return null;
                       },
                     ),
@@ -112,10 +117,9 @@ class _LoginState extends State<Login> {
                         if (value == null || value.isEmpty) {
                           return "Please enter password.";
                         } else if (value !=
-                            _boxAccounts.get(_controllerUsername.text)) {
+                            _accountsData[_controllerUsername.text]) {
                           return "Wrong password.";
                         }
-
                         return null;
                       },
                     ),
@@ -131,8 +135,9 @@ class _LoginState extends State<Login> {
                           ),
                           onPressed: () {
                             if (_formKey.currentState?.validate() ?? false) {
-                              _boxLogin.put("loginStatus", true);
-                              _boxLogin.put("userName", _controllerUsername.text);
+                              _loginData["loginStatus"] = true;
+                              _loginData["userName"] =
+                                  _controllerUsername.text;
 
                               Navigator.pushReplacement(
                                 context,
@@ -144,11 +149,12 @@ class _LoginState extends State<Login> {
                               );
                             }
                           },
-                          child: const Text("Login",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 18.0,
-                              )
+                          child: const Text(
+                            "Login",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 18.0,
+                            ),
                           ),
                         ),
                         Row(

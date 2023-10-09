@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 
 class Signup extends StatefulWidget {
   const Signup({Key? key}) : super(key: key);
@@ -17,11 +16,11 @@ class _SignupState extends State<Signup> {
   final TextEditingController _controllerUsername = TextEditingController();
   final TextEditingController _controllerEmail = TextEditingController();
   final TextEditingController _controllerPassword = TextEditingController();
-  final TextEditingController _controllerConFirmPassword =
-  TextEditingController();
-
-  final Box _boxAccounts = Hive.box("accounts");
+  final TextEditingController _controllerConfirmPassword =
+  TextEditingController(); // changed name for consistency
   bool _obscurePassword = true;
+
+  final Map<String, dynamic> _accountsData = {}; // replace Hive with Map
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +70,7 @@ class _SignupState extends State<Signup> {
                   validator: (String? value) {
                     if (value == null || value.isEmpty) {
                       return "Please enter username.";
-                    } else if (_boxAccounts.containsKey(value)) {
+                    } else if (_accountsData.containsKey(value)) {
                       return "Username is already registered.";
                     }
                     return null;
@@ -136,7 +135,7 @@ class _SignupState extends State<Signup> {
                 ),
                 const SizedBox(height: 10),
                 TextFormField(
-                  controller: _controllerConFirmPassword,
+                  controller: _controllerConfirmPassword,
                   obscureText: _obscurePassword,
                   focusNode: _focusNodeConfirmPassword,
                   keyboardType: TextInputType.visiblePassword,
@@ -176,10 +175,8 @@ class _SignupState extends State<Signup> {
                   ),
                   onPressed: () {
                     if (_formKey.currentState?.validate() ?? false) {
-                      _boxAccounts.put(
-                        _controllerUsername.text,
-                        _controllerConFirmPassword.text,
-                      );
+                      _accountsData[_controllerUsername.text] =
+                          _controllerConfirmPassword.text;
 
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
@@ -227,7 +224,7 @@ class _SignupState extends State<Signup> {
     _controllerUsername.dispose();
     _controllerEmail.dispose();
     _controllerPassword.dispose();
-    _controllerConFirmPassword.dispose();
+    _controllerConfirmPassword.dispose();
     super.dispose();
   }
 }
